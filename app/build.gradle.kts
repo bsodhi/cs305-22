@@ -14,6 +14,7 @@ plugins {
 repositories {
     // Use JCenter for resolving dependencies.
     jcenter()
+    //mavenCentral()
 }
 
 dependencies {
@@ -25,11 +26,17 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:29.0-jre")
+
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
+    implementation("org.apache.poi:poi:5.1.0")
+
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+    implementation("org.apache.poi:poi-ooxml:5.1.0")
 }
 
 application {
     // Define the main class for the application.
-    mainClass.set("org.cs305.App")
+    mainClass.set("org.cs305.MainScreen")
 }
 
 tasks.test {

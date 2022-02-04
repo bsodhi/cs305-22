@@ -4,6 +4,11 @@
  */
 package org.cs305;
 
+import org.cs305.api.ExcelProcessor;
+import java.awt.HeadlessException;
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author someuser
@@ -26,6 +31,7 @@ public class MainScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
         txtFirstFile = new javax.swing.JTextField();
         btnFirstFile = new javax.swing.JButton();
@@ -46,23 +52,45 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel1.setText("First file:");
 
         btnFirstFile.setText("Browse");
+        btnFirstFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFirstFileActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Second file:");
 
         btnSecondFile.setText("Browse");
+        btnSecondFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSecondFileActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Col to check in first file:");
 
         jLabel4.setText("Col. to check in 2nd file:");
 
         btnProcess.setText("Process");
+        btnProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcessActionPerformed(evt);
+            }
+        });
 
         btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Status logs:"));
 
         txtStatusLogs.setEditable(false);
+        txtStatusLogs.setBackground(new java.awt.Color(0, 0, 0));
         txtStatusLogs.setColumns(20);
+        txtStatusLogs.setForeground(new java.awt.Color(0, 255, 0));
         txtStatusLogs.setRows(5);
         jScrollPane1.setViewportView(txtStatusLogs);
 
@@ -132,6 +160,63 @@ public class MainScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    private void btnFirstFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstFileActionPerformed
+        
+        File f = showFileChooser();
+        if (f != null) txtFirstFile.setText(f.getAbsolutePath());
+        
+    }//GEN-LAST:event_btnFirstFileActionPerformed
+
+    protected File showFileChooser() throws HeadlessException {
+        // TODO add your handling code here:
+        int returnVal = jFileChooser1.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            return jFileChooser1.getSelectedFile();
+        }
+        return null;
+    }
+
+    private void btnSecondFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSecondFileActionPerformed
+        // TODO add your handling code here:
+        File f = showFileChooser();
+        if (f != null) txtSecondFile.setText(f.getAbsolutePath());
+    }//GEN-LAST:event_btnSecondFileActionPerformed
+
+    private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
+        // TODO add your handling code here:
+        try {
+            String firstFP = txtFirstFile.getText();
+            String secFP = txtSecondFile.getText();
+            String colFirst = txtColInFirst.getText();
+            String colSec = txtColInSecond.getText();
+
+            ExcelProcessor ep = new ExcelProcessor(firstFP, secFP, 
+                Integer.parseInt(colFirst), Integer.parseInt(colSec));
+            
+            ep.compareFiles();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logInfo("Error occurred: "+ex);
+        }
+    }//GEN-LAST:event_btnProcessActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        txtFirstFile.setText("");
+        txtSecondFile.setText("");
+        txtColInFirst.setText("");
+        txtColInSecond.setText("");
+        txtStatusLogs.setText("");
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    void logInfo(String msg) {
+        String old = txtStatusLogs.getText();
+        txtStatusLogs.setText(old + "\n" + msg);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -172,6 +257,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnProcess;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSecondFile;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

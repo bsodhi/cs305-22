@@ -8,12 +8,13 @@ import org.cs305.api.ExcelProcessor;
 import java.awt.HeadlessException;
 import java.io.File;
 import javax.swing.JFileChooser;
+import org.cs305.api.StatusListener;
 
 /**
  *
  * @author someuser
  */
-public class MainScreen extends javax.swing.JFrame {
+public class MainScreen extends javax.swing.JFrame implements StatusListener {
 
     /**
      * Creates new form MainScreen
@@ -187,15 +188,24 @@ public class MainScreen extends javax.swing.JFrame {
     private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
         // TODO add your handling code here:
         try {
-            String firstFP = txtFirstFile.getText();
-            String secFP = txtSecondFile.getText();
-            String colFirst = txtColInFirst.getText();
-            String colSec = txtColInSecond.getText();
+            ExcelProcessor.OpPrams opp = new ExcelProcessor.OpPrams();
+            opp.firstFilePath = txtFirstFile.getText();
+            opp.secondFilePath = txtSecondFile.getText();
+            opp.locationColInFirst = Integer.parseInt(txtColInFirst.getText());
+            opp.locationColInSecond = Integer.parseInt(txtColInSecond.getText());
 
-            ExcelProcessor ep = new ExcelProcessor(firstFP, secFP, 
-                Integer.parseInt(colFirst), Integer.parseInt(colSec));
+            ExcelProcessor ep = new ExcelProcessor(opp, this);
             
+            
+//            ep.compareFiles(new StatusListener() {
+//                @Override
+//                public void logMessage(String message) {
+//                    logInfo(message);
+//                }
+//            });
+
             ep.compareFiles();
+            
             
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -269,4 +279,9 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JTextField txtSecondFile;
     private javax.swing.JTextArea txtStatusLogs;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void logMessage(String message) {
+        logInfo(message);
+    }
 }
